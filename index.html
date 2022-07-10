@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="container">
+    <article class="start">
+        <h1 class="mt-5 text-center">나랑 꼭 닮은 고양이는?</h1>
+        <button type="button" class="btn btn-primary mt-5" onclick='start();'>테스트 시작하기</button>
+    </article>
+    <article class="question">
+        <div class="progress mt-5">
+            <div class="progress-bar" role="progressbar" style="width: calc(100/12*1%)"></div>
+        </div>
+        <h2 id="title" class="text-center mt-5">문제</h2>
+        <input id="type" type="hidden" value="EI">
+        <button id="A" type="button" class="btn btn-primary mt-5">Primary</button>
+        <button id="B" type="button" class="btn btn-primary mt-5">Primary</button>
+    </article>
+    <article class="result">
+        <img id="img" class="rounded-circle mt-5" src="lion.jpg" alt="animal">
+        <h2 id="animal" class="text-center mt-5">동물이름</h2>
+        <h3 id="explain" class="text-center mt-5">설명</h3>
+    </article>
+    <input type="hidden" id="EI" value="0">
+    <input type="hidden" id="SN" value="0">
+    <input type="hidden" id="TF" value="0">
+    <input type="hidden" id="JP" value="0">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script>
+        var num = 1;
+        var q = {
+            1: {"title": "새로운 환경에서 일하게 되었을 때?", "type": "EI", "A": "새로운 환경에 금방 적응한다.", "B": "누군가 말을 걸어주길 바란다."},
+            2: {"title": "너무 조용하게 모인 조별과제 상황 이 적막은?", "type": "EI", "A": "아무도 말 안 하니 내가 해야겠다.", "B": "누군가 말하겠지.."},
+            3: {"title": "내일 공강인데 오늘 수업 끝나구 뭐할까?", "type": "EI", "A": "밤새 술 먹고 죽자 ~ 얘들아 뭐해", "B": "넷플릭스 신작 얼릉 집가서 몰아봐야지"},
+            4: {"title": "아무 생각 안할 때 어때?", "type": "SN", "A": "진짜 아무 생각 안하는데?", "B": "아무생각안하는 생각은 뭐해야되징 아 생각하지말고 무슨생각하는거야..?"},
+            5: {"title": "헐 김치찌개 맛있겠다 레시피 알려줘", "type": "SN", "A": "김치 한포기에 설탕 몇그램 이라고 말하며 자세하게 정량을 말해준다.", "B": "음...감에따라 다른데 그냥 먹어보고 눈대중?"},
+            6: {"title": "노래들을 때 더 좋아하는 것은?", "type": "SN", "A": "이 멜로디 너무 좋다", "B": "이 가사 너무 좋다"},
+            7: {"title": "교통사고가 난 상황", "type": "TF", "A": "보험은 불렀어? 병원은 갔어?", "B": "헐 괜찮아?ㅠㅠㅠ안다쳤어? 무슨일이야"},
+            8: {"title": "나 힘들게 돈 모아서 아이패드 샀어!", "type": "TF", "A": "와 대박! 아이패드 뭐 산거야??", "B": "돈 힘들게 모았겠다 고생했어!! 축하해"},
+            9: {"title": "약속에 늦었을 때", "type": "TF", "A": "늦은 이유가 뭔데? ", "B": "일단 미안하다고 먼저한다. 이유부터 말하면 변명하는것 같다."},
+            10: {"title": "여행을 간 상황 갑작스러운 휴무로 먹고싶은 가게가 닫았다", "type": "JP", "A": "다른가게 검색 후 후기까지 찾아본다.", "B": "옆집 들어가서 비슷한 메뉴 먹는다."},
+            11: {"title": "0월 0일날 5시에 만나기로 했는데 친구가 당일날 연락이 없을 경우", "type": "JP", "A": "만나기로 했으니 일단 장소에 간다", "B": "파토인가..?"},
+            12: {"title": "집에 친구가 놀러오기로 했을 때", "type": "JP", "A": "얘는 잘먹으니깐, 친구별 분석하면서 정확하게 계획을 세운다.", "B": "부족하면 그때 더 시키지 뭐"}
+        }
+        var result = {
+            "ISTJ": {"animal": "브리티쉬 숏 헤어", "explain": "브리티쉬 숏 헤어는 내성적이고 지적이며 충실한 고양이에요. 쉽게 훈련되며 가족들에게 충실하며 애정이 넘친답니다.", "img": "lion.jpg"},
+            "ISFJ": {"animal": "페르시안", "explain": "성실하고 느긋하면서도 집사에게 충실한 페르시안 고양이는 우아하면서도 매너가 넘칩니다. 또한 혼자만의 시간은 즐기는 차분한 스타일 고양이랍니다.", "img": "lion.jpg"},
+            "INFJ": {"animal": "러시안 블루", "explain": "집사의 기분ㅇ르 잘 감지하고, 집사가 슬퍼하면 안아준다는 러시안 블루는 상대방을 잘 이해하고 다정한 고양이에요. 내성적이지만 누군가를 신뢰하기 시작한다면 다정해지며 통찰력이 뛰어나답니다. ", "img": "lion.jpg"},
+            "INTJ": {"animal": "노르웨이 숲", "explain": "똑똑하면서 독립적인 노르웨이 숲 고양이는 빨리 배우고 매우 주의깊은 측면이 있어요. 분석력이 뛰어나 복잡한 퍼즐 장난감을 가지고 노는 것을 좋아한답니다.", "img": "lion.jpg"},
+            "ISTP": {"animal": "스라소니", "explain": "스라소니는 개인적이고 지능적이며 신중하게 이것저것 고려합니다. 주의깊게 분석하고 효율적으로 행동하며 독립적인 고양이 이랍니다.", "img": "lion.jpg"},
+            "ISFP": {"animal": "아나톨리안", "explain": "온화하면서도 조용한 아나톨리안 고양이는 따듯한 감성을 가지고 있는 고양이에요. 아나톨리안 역시 다른 동물과 어린아이를 배려해 온순한 거인이라고 불린답니다.", "img": "lion.jpg"},
+            "INFP": {"animal": "버만", "explain": "조용하고 똑똑하고 애정넘치는 버만은 자기혼자만의 시간을 좋아하는 스타일입니다. 조용하고 평화로운 시간을 즐기는 온순하고 침착한 고양이랍니다.", "img": "lion.jpg"},
+            "INTP": {"animal": "터키쉬 반", "explain": "지적 호기심이 높은 터키쉬반은 호기심도 많고 지능적이랍니다. 무슨일이 일어날지 궁금해서 여러가지 물건에 관심을 보이며 심지어 수도꼭지를 잠그기까지 한답니다.", "img": "lion.jpg"},
+            "ESTP": {"animal": "뱅갈", "explain": "자신감 넘치고 민첩한 뱅갈고양이는 뭐든지 쉽게 배우는 스타일이에요. 호기심도 많아서 새로운 것에 대한 관심이 많고 매우 활동적인 고양이라 수완이 좋답니다.", "img": "lion.jpg"},
+            "ESFP": {"animal": "스핑크스", "explain": "사교적인 스핑크스는 장난기 많고 활기차며 친근감 넘치는 고양이에요. 사랑스럽고 사교적인 성격때문에 모든 고양이 중 가장 애정넘치는 고양이로도 뽑혔답니다.", "img": "lion.jpg"},
+            "ENFP": {"animal": "싱가푸라", "explain": "탐험하고 노는 것을 좋아하며 활발하고 호기심많고 사교적인 싱가푸라는 열정넘치는 스파크 스타일의 고양이랍니다.", "img": "lion.jpg"},
+            "ENTP": {"animal": "발리니즈", "explain": "호기심 많고 장난스럽고 똑똑한 발리니즈는 새로운 것을 매우고 독특한 방법으로 주변을 탐험하는 관심이 높아요! 지루한 것을 못참는 사고치는 고양이 일수도...!", "img": "lion.jpg"},
+            "ESTJ": {"animal": "드래곤 리", "explain": "리 후아 라고도 불리는 드래곤 리는 똑똑하고 친근하며 책임감이 있어요. 기억력도 좋고 활동성있는 재능있는 사냥꾼 고양이랍니다.", "img": "lion.jpg"},
+            "ESFJ": {"animal": "저먼 렉스", "explain": "애정이 넘치고 사랑스러운 저먼 렉스는 사람과 함께 하는 것을 매우 좋아한답니다. 혼자있는 시간을 좋아하지않고 사람들과 있는 것을 좋아하는 고양이랍니다.", "img": "lion.jpg"},
+            "ENFJ": {"animal": "통키니즈", "explain": "열정적이고 친근하며 똑똑한 통키니즈는 사교적인 고양이에요. 사람과 함께 하는 것을 즐기지만 고집이 세고 의지가 강한 고양이라 열정적이랍니다.", "img": "lion.jpg"},
+            "ENTJ": {"animal": "샴", "explain": "외향적이고 영리한 샴고양이는 매우 지배적인 성격을 가지고 있어서 자신의 의션을 전달하고 알리는 것을 좋아해요. 샴고양이는 집사를 지배하고 싶어 한답니다.", "img": "lion.jpg"}
+        }
+        function start() {
+            $(".start").hide();
+            $(".question").show();
+            next();
+        }
+        $("#A").click(function(){
+            var type = $("#type").val();
+            var preValue = $("#"+type).val();
+            $("#"+type).val(parseInt(preValue)+1);
+            next();
+        });
+        $("#B").click(function(){
+            next();
+        });
+        function next() {
+            if (num == 13) {
+                $(".question").hide();
+                $(".result").show();
+                var mbti = "";
+                ($("#EI").val() < 2) ? mbti+="I" : mbti+="E";
+                ($("#SN").val() < 2) ? mbti+="N" : mbti+="S";
+                ($("#TF").val() < 2) ? mbti+="F" : mbti+="T";
+                ($("#JP").val() < 2) ? mbti+="P" : mbti+="J";
+                $("#img").attr("src",result[mbti]["img"]);
+                $("#animal").html(result[mbti]["animal"]);
+                $("#explain").html(result[mbti]["explain"]);
+            } else {
+                $(".progress-bar").attr('style','width: calc(100/12*'+num+'%)');
+                $("#title").html(q[num]["title"]);
+                $("#type").val(q[num]["type"]);
+                $("#A").html(q[num]["A"]);
+                $("#B").html(q[num]["B"]);
+                num++;
+            }
+        }
+    </script>
+</body>
+</html>
